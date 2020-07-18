@@ -15,8 +15,7 @@
     <script src="https://cdn.jsdelivr.net/npm/vue@2.x/dist/vue.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.js"></script>
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
-
-
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
 
 
 </head>
@@ -45,10 +44,13 @@
                         <v-card
                                 color="#1F7087"
                                 dark
+                                class="my-text"
                         >
-                            <v-card-title class="headline">{{item.seq}} : {{item.name}}</v-card-title>
+                            <v-card-title class="headline ">
+                                <a :href="item.url" target="_blank">{{item.seq}} : {{item.name}}</a>
+                            </v-card-title>
                             <v-card-subtitle>{{item.url}}</v-card-subtitle>
-                            <v-card-text class="my-text" v-html="item.resultHtml"></v-card-text>
+                            <v-card-text class="" v-html="item.resultHtmlHandled"></v-card-text>
 
                             <!--<v-card-actions>
                                 <v-btn text>Link</v-btn>
@@ -87,11 +89,29 @@
                         console.log(response);
                         me.message = '>> update time: ' + new Date().toString();
                         me.novelList = response.data.result;
+                        me.handleLink();
 
                     }).catch(function (error) {
                         me.message = '>> error: ' + error;
                     });
                 },
+                /*
+                 a link 처리
+                 */
+                handleLink: function() {
+                    if( ! this.novelList ) {
+                        return;
+                    }
+                    this.novelList.forEach(function(item,i){
+                        item.siteUrl = item.url.replace(/(https?:\/\/[^/]+)\/.*/, '$1');
+                        var $div = $('<div></div>').append(item.resultHtml);
+                        $div.find('a[href]').each(function(j, el){
+                           var oldHref = $(el).attr('href');
+                           $(el).prop('href', item.siteUrl + oldHref);
+                        });
+                        item.resultHtmlHandled = $div.html();
+                    });
+                }
             },
             created: function() {
                 this.fetchData();

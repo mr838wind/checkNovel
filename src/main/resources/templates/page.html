@@ -16,6 +16,7 @@
     <script src="https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.js"></script>
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
     <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
 
 
 </head>
@@ -25,16 +26,17 @@
             <v-main>
                 <v-container>
 
-                    <v-row dense>
-                        <v-col cols="12">
-                            <v-card
-                                    color="#385F73"
-                                    dark
-                            >
-                                <v-card-title class="headline">{{message}}</v-card-title>
-                            </v-card>
-                        </v-col>
-                    </v-row>
+                    <v-col cols="12" >
+                        <v-card
+                                color="#385F73"
+                                dark
+                                class="my-text"
+                        >
+                            <v-card-title class="headline ">
+                                {{message}}
+                            </v-card-title>
+                        </v-card>
+                    </v-col>
 
                     <v-col
                             v-for="(item, i) in novelList"
@@ -87,7 +89,9 @@
                     axios.get('/ajax/check')
                     .then(function (response) {
                         console.log(response);
-                        me.message = '>> update time: ' + new Date().toString();
+                        //me.message = '>> update time: ' + new Date().toString();
+                        var now = moment(new Date()).format('YYYY-MM-DD HH:mm:ss');
+                        me.message = '>> update time: ' + now;
                         me.novelList = response.data.result;
                         me.handleLink();
 

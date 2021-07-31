@@ -32,8 +32,8 @@
                                 dark
                                 class="my-text"
                         >
-                            <v-card-title class="headline ">
-                                {{message}}
+                            <v-card-title class="headline " v-html="message" >
+
                             </v-card-title>
                         </v-card>
                     </v-col>
@@ -91,7 +91,7 @@
                         console.log(response);
                         //me.message = '>> update time: ' + new Date().toString();
                         var now = moment(new Date()).format('YYYY-MM-DD HH:mm:ss');
-                        me.message = '>> update time: ' + now;
+                        me.message = '>> update time: <br/>' + now;
                         me.novelList = response.data.result;
                         me.handleLink();
 
